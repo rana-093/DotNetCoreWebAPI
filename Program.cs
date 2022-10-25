@@ -1,11 +1,21 @@
+using DotNetCoreWebAPI.DbContexts;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => {
+    options.ReturnHttpNotAcceptable = true;
+}).AddXmlDataContractSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
+
+builder.Services.AddDbContext<CityContext>(dbContextOptions => dbContextOptions
+.UseSqlServer("Data Source=LAPTOP-2OD6FC1P;Initial Catalog=Person;Integrated Security=True"));
 
 var app = builder.Build();
 

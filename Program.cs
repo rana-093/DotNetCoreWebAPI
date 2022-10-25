@@ -1,4 +1,5 @@
 using DotNetCoreWebAPI.DbContexts;
+using DotNetCoreWebAPI.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
 builder.Services.AddDbContext<CityContext>(dbContextOptions => dbContextOptions
-.UseSqlServer("Data Source=LAPTOP-2OD6FC1P;Initial Catalog=Person;Integrated Security=True"));
+.UseSqlServer(builder.Configuration["ConnectionStrings:personDatabase"]));
+
+builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
 
 var app = builder.Build();
 
